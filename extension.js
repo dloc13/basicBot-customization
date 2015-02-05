@@ -141,7 +141,7 @@
         afkRankCheck: "ambassador",
         motdEnabled: false,
         motdInterval: 5,
-        motd: "Temporary Message of the Day",
+        motd: "I'm a rock star among geeks, wonks, and nerds.",
         filterChat: true,
         etaRestriction: false,
         welcome: true,
