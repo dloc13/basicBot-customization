@@ -40,7 +40,7 @@
 					if (basicBot.settings.rulereminder) {
                         basicBot.settings.rulereminder = !basicBot.settings.rulereminder;
 						ruletimer = setTimeout(function() {API.sendChat("Please take a minute to read our room rules!")},3000);
-					else {
+					} else {
 						basicBot.settings.rulereminder = !basicBot.settings.rulereminder;
 						window.clearTimeout(ruletimer);
 					}
