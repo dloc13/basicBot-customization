@@ -149,7 +149,7 @@
         rulesLink: null,
         themeLink: null,
 		cleanupChat: false,
-        fbLink: null,
+        fbLink: "https://www.facebook.com/groups/995813493781055/",
         youtubeLink: null,
         website: null,
         intervalMessages: [],
