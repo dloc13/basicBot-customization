@@ -39,8 +39,7 @@
                 else {
 					if (bot.settings.rulereminder) {
                         bot.settings.rulereminder = !bot.settings.rulereminder;
-						debugger;
-						ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules!")},3000);
+						ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules!")},1000*60*30); //30min
 					} else {
 						bot.settings.rulereminder = !bot.settings.rulereminder;
 						window.clearInterval(ruletimer);
