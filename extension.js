@@ -37,11 +37,11 @@
                 if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
                 if (!bot.commands.executable(this.rank, chat)) return void (0);
                 else {
-					if (basicBot.settings.rulereminder) {
-                        basicBot.settings.rulereminder = !basicBot.settings.rulereminder;
+					if (bot.settings.rulereminder) {
+                        bot.settings.rulereminder = !bot.settings.rulereminder;
 						ruletimer = setTimeout(function() {API.sendChat("Please take a minute to read our room rules!")},3000);
 					} else {
-						basicBot.settings.rulereminder = !basicBot.settings.rulereminder;
+						bot.settings.rulereminder = !bot.settings.rulereminder;
 						window.clearTimeout(ruletimer);
 					}
                 }
