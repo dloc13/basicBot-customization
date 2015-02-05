@@ -31,19 +31,25 @@
          */
 		bot.commands.rulereminderCommand = {
             command: 'rulereminder',  //The command to be called. With the standard command literal this would be: !bacon
-            rank: 'user', //Minimum user permission to use the command
-            type: 'exact', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
+            rank: 'bouncer', //Minimum user permission to use the command
+            type: 'startsWith', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
             functionality: function (chat, cmd) {
                 if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
                 if (!bot.commands.executable(this.rank, chat)) return void (0);
                 else {
-					if (bot.settings.rulereminder) {
-                        bot.settings.rulereminder = !bot.settings.rulereminder;
-						ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules!")},1000*60*30); //30min
-					} else {
-						bot.settings.rulereminder = !bot.settings.rulereminder;
-						window.clearInterval(ruletimer);
-					}
+					var msg = chat.message;
+					var minutes = msg.substring(cmd.length + 1);			
+						if (bot.settings.rulereminder) {
+							if (!isNaN(parseInt(minutes,10))) {
+								bot.settings.rulereminder = !bot.settings.rulereminder;
+								ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(minutes,10));
+								API.sendChat("/me enabled the reminder for every " + parseInt(minutes,10) + " minutes");
+							}
+						} else {
+							bot.settings.rulereminder = !bot.settings.rulereminder;
+							window.clearInterval(ruletimer);
+							API.sendChat("/me disabled the reminder");
+						}
                 }
             }
         };
