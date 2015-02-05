@@ -9,7 +9,7 @@
 
         //Precaution to make sure it is assigned properly.
         var bot = window.bot;
-
+		var ruletimer;
         //Load custom settings set below
         bot.retrieveSettings();
 
@@ -39,10 +39,11 @@
                 else {
 					if (bot.settings.rulereminder) {
                         bot.settings.rulereminder = !bot.settings.rulereminder;
-						ruletimer = setTimeout(function() {API.sendChat("Please take a minute to read our room rules!")},3000);
+						debugger;
+						ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules!")},3000);
 					} else {
 						bot.settings.rulereminder = !bot.settings.rulereminder;
-						window.clearTimeout(ruletimer);
+						window.clearInterval(ruletimer);
 					}
                 }
             }
@@ -107,7 +108,7 @@
         language: "english",
         chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
         maximumAfk: 120,
-		rulereminder: false,
+		rulereminder: true,
         afkRemoval: true,
         maximumDc: 60,
         bouncerPlus: true,
