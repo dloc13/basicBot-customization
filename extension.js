@@ -1,4 +1,4 @@
-(function () {
+ (function () {
 
     //Define our function responsible for extending the bot.
     function extend() {
@@ -16,7 +16,6 @@
         /*
          Extend the bot here, either by calling another function or here directly.
          Model code for a bot command:
-
          bot.commands.commandCommand = {
          command: 'cmd',
          rank: 'user/bouncer/mod/manager',
@@ -29,18 +28,22 @@
          }
          }
          }
-
          */
-
-        bot.commands.baconCommand = {
-            command: 'bacon',  //The command to be called. With the standard command literal this would be: !bacon
+		bot.commands.rulereminderCommand = {
+            command: 'rulereminder',  //The command to be called. With the standard command literal this would be: !bacon
             rank: 'user', //Minimum user permission to use the command
             type: 'exact', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
             functionality: function (chat, cmd) {
                 if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
                 if (!bot.commands.executable(this.rank, chat)) return void (0);
                 else {
-                    API.sendChat("/me Bacon!!!");
+					if (basicBot.settings.rulereminder) {
+                        basicBot.settings.rulereminder = !basicBot.settings.rulereminder;
+						ruletimer = setTimeout(function() {API.sendChat("Please take a minute to read our room rules!")},3000);
+					else {
+						basicBot.settings.rulereminder = !basicBot.settings.rulereminder;
+						window.clearTimeout(ruletimer);
+					}
                 }
             }
         };
@@ -79,6 +82,18 @@
                 }
             }
         };
+        bot.commands.baconCommand = {
+            command: 'bacon',  //The command to be called. With the standard command literal this would be: !bacon
+            rank: 'user', //Minimum user permission to use the command
+            type: 'exact', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
+            functionality: function (chat, cmd) {
+                if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                if (!bot.commands.executable(this.rank, chat)) return void (0);
+                else {
+                    API.sendChat("/me Bacon!!!");
+                }
+            }
+        };
 
         //Load the chat package again to account for any changes
         bot.loadChat();
@@ -92,6 +107,7 @@
         language: "english",
         chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
         maximumAfk: 120,
+		rulereminder: false,
         afkRemoval: true,
         maximumDc: 60,
         bouncerPlus: true,
@@ -126,6 +142,7 @@
         opLink: null,
         rulesLink: null,
         themeLink: null,
+		cleanupChat: false,
         fbLink: null,
         youtubeLink: null,
         website: null,
