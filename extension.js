@@ -53,7 +53,7 @@
 										this.fetchJSON('http://www.blabbermouth.net/feed.rss');
 									} else if (parameter == 'jokes') {
 										this.fetchJSON('http://www.jokesareawesome.com/rss/latest/25/');
-									} else (parameter == 'jokes') {
+									} else {
 										this.fetchJSON('http://www.jokesareawesome.com/rss/latest/25/');	//default
 									}
 								},
