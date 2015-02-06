@@ -2,6 +2,7 @@
 
     //Define our function responsible for extending the bot.
     function extend() {
+
         //If the bot hasn't been loaded properly, try again in 1 second(s).
         if (!window.bot) {
             return setTimeout(extend, 1 * 1000);
@@ -29,6 +30,56 @@
          }
          }
          */
+		bot.commands.newsCommand = {
+            command: 'news',  //The command to be called. With the standard command literal this would be: !bacon
+            rank: 'user', //Minimum user permission to use the command
+            type: 'exact', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
+            functionality: function (chat, cmd) {
+                if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                if (!bot.commands.executable(this.rank, chat)) return void (0);
+                else {
+						simpleAJAXLib = {
+								/*getTinyURL: function(longURL, success) {
+									var API = 'http://json-tinyurl.appspot.com/?url=',
+									    URL = API + encodeURIComponent(longURL) + '&callback=?';
+								 
+									$.getJSON(URL, function(data){
+										success && success(data.tinyurl);
+									});
+								},*/
+						
+								init: function () {
+									this.fetchJSON('http://mlb.mlb.com/partnerxml/gen/news/rss/mlb.xml');
+								},
+						 
+								fetchJSON: function (url) {
+									var root = 'https://query.yahooapis.com/v1/public/yql?q=';
+									var yql = 'select * from xml where url="' + url + '"';
+									var proxy_url = root + encodeURIComponent(yql) + '&format=json&diagnostics=false&callback=simpleAJAXLib.display';
+									document.getElementsByTagName('body')[0].appendChild(this.jsTag(proxy_url));
+								},
+						 
+								jsTag: function (url) {
+									var script = document.createElement('script');
+									script.setAttribute('type', 'text/javascript');
+									script.setAttribute('src', url);
+									return script;
+								},
+						 
+								display: function (results) {
+									/*var rNumber = Math.floor(Math.random()*30);
+									API.sendChat(
+									results.query.results.rss.channel.item[rNumber].title 
+									+ " (" 
+									+ this.getTinyURL(results.query.results.rss.channel.item[rNumber].link, function(tinyurl){return tinyurl})
+									+ ")");*/
+								}
+						}
+						simpleAJAXLib.init();
+                }
+            }
+        }; 
+		 
 		bot.commands.rulereminderCommand = {
             command: 'rulereminder',  //The command to be called. With the standard command literal this would be: !bacon
             rank: 'manager', //Minimum user permission to use the command
@@ -161,7 +212,7 @@
             OP: "https://rawgit.com/dloc13/basicBot-customization/master/blacklists/ExampleOPlist.json"
         }
     }));
-
+	
     //Start the bot and extend it when it has loaded.
     $.getScript('https://rawgit.com/dloc13/basicBot/master/basicBot.js', extend);
 
