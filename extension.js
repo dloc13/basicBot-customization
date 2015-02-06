@@ -33,23 +33,23 @@
 		bot.commands.newsCommand = {
             command: 'news',  //The command to be called. With the standard command literal this would be: !bacon
             rank: 'user', //Minimum user permission to use the command
-            type: 'exact', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
+            type: 'startsWith', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
             functionality: function (chat, cmd) {
                 if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
                 if (!bot.commands.executable(this.rank, chat)) return void (0);
                 else {
+						var msg = chat.message;
+						var lastSpace = msg.lastIndexOf(' ');
+						var parameter = msg.substring(lastSpace + 1);
+						
 						simpleAJAXLib = {
-								/*getTinyURL: function(longURL, success) {
-									var API = 'http://json-tinyurl.appspot.com/?url=',
-									    URL = API + encodeURIComponent(longURL) + '&callback=?';
-								 
-									$.getJSON(URL, function(data){
-										success && success(data.tinyurl);
-									});
-								},*/
 						
 								init: function () {
-									this.fetchJSON('http://mlb.mlb.com/partnerxml/gen/news/rss/mlb.xml');
+									if (parameter == 'baseball') {
+										this.fetchJSON('http://sports.espn.go.com/espn/rss/mlb/news');
+									} else if (parameter == 'progrock') {
+										this.fetchJSON('http://progressiverockcentral.com/feed/');
+									}					
 								},
 						 
 								fetchJSON: function (url) {
@@ -67,12 +67,25 @@
 								},
 						 
 								display: function (results) {
-									/*var rNumber = Math.floor(Math.random()*30);
-									API.sendChat(
-									results.query.results.rss.channel.item[rNumber].title 
-									+ " (" 
-									+ this.getTinyURL(results.query.results.rss.channel.item[rNumber].link, function(tinyurl){return tinyurl})
-									+ ")");*/
+									if (parameter == 'baseball') {
+										var rNumber = Math.floor(Math.random()*16);
+										var long_url = results.query.results.rss.channel.item[rNumber].link;
+										
+										API.sendChat(
+										results.query.results.rss.channel.item[rNumber].title 
+										+ " (" 
+										+ long_url
+										+ ")");
+									} else if (parameter == 'progrock') {
+										var rNumber = Math.floor(Math.random()*10);
+										var long_url = results.query.results.rss.channel.item[rNumber].link;
+										
+										API.sendChat(
+										results.query.results.rss.channel.item[rNumber].title 
+										+ " (" 
+										+ long_url
+										+ ")");
+									}		
 								}
 						}
 						simpleAJAXLib.init();
