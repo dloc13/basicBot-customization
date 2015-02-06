@@ -49,7 +49,13 @@
 										this.fetchJSON('http://sports.espn.go.com/espn/rss/mlb/news');
 									} else if (parameter == 'progrock') {
 										this.fetchJSON('http://progressiverockcentral.com/feed/');
-									}					
+									} else if (parameter == 'metal') {
+										this.fetchJSON('http://www.blabbermouth.net/feed.rss');
+									} else if (parameter == 'jokes') {
+										this.fetchJSON('http://www.jokesareawesome.com/rss/latest/25/');
+									} else (parameter == 'jokes') {
+										this.fetchJSON('http://www.jokesareawesome.com/rss/latest/25/');	//default
+									}
 								},
 						 
 								fetchJSON: function (url) {
@@ -69,23 +75,22 @@
 								display: function (results) {
 									if (parameter == 'baseball') {
 										var rNumber = Math.floor(Math.random()*16);
-										var long_url = results.query.results.rss.channel.item[rNumber].link;
-										
-										API.sendChat(
-										results.query.results.rss.channel.item[rNumber].title 
-										+ " (" 
-										+ long_url
-										+ ")");
 									} else if (parameter == 'progrock') {
 										var rNumber = Math.floor(Math.random()*10);
-										var long_url = results.query.results.rss.channel.item[rNumber].link;
+									} else if (parameter == 'metal') {
+										var rNumber = Math.floor(Math.random()*20);
+									} else if (parameter == 'jokes') {
+										var rNumber = Math.floor(Math.random()*25);
+									} else {
+										var rNumber = Math.floor(Math.random()*25);	//default
+									}
+									var long_url = results.query.results.rss.channel.item[rNumber].link;
 										
-										API.sendChat(
-										results.query.results.rss.channel.item[rNumber].title 
-										+ " (" 
-										+ long_url
-										+ ")");
-									}		
+									API.sendChat(
+									results.query.results.rss.channel.item[rNumber].title 
+									+ " (" 
+									+ long_url
+									+ ")");
 								}
 						}
 						simpleAJAXLib.init();
@@ -209,6 +214,7 @@
         filterChat: true,
         etaRestriction: false,
         welcome: true,
+		welcomemsg: "Rock ipedia has summoned you! Welcome!",
         opLink: null,
         rulesLink: null,
         themeLink: null,
