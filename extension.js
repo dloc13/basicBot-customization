@@ -40,20 +40,27 @@
 						var msg = chat.message;
 						var lastSpace = msg.lastIndexOf(' ');
 						var parameter = msg.substring(lastSpace + 1);
+						var selectedRSSFeed = -1;
 						
 						simpleAJAXLib = {
 						
 								init: function () {
-									if (parameter == 'baseball') {
-										this.fetchJSON('http://sports.espn.go.com/espn/rss/mlb/news');
-									} else if (parameter == 'progrock') {
-										this.fetchJSON('http://progressiverockcentral.com/feed/');
-									} else if (parameter == 'metal') {
-										this.fetchJSON('http://www.blabbermouth.net/feed.rss');
-									} else if (parameter == 'jokes') {
-										this.fetchJSON('http://www.jokesareawesome.com/rss/latest/25/');
-									} else {
-										this.fetchJSON('http://www.jokesareawesome.com/rss/latest/25/');	//default
+									for (var i = 0; i < bot.settings.rssFeeds.length; i++) {
+										//Match the parameter with the rssFeeds array. If non match, display the howto.
+										if (parameter == bot.settings.rssFeeds[i][0]) {
+											this.fetchJSON(bot.settings.rssFeeds[i][1]);
+											selectedRSSFeed = i;
+										} else if (selectedRSSFeed == -1 && bot.settings.rssFeeds.length - 1 == i) {
+												var rssOptions = "/me Please use one of the following parameters (ie.'!news rock'): '" + bot.settings.rssFeeds[0][0] + "'";
+												for (var i = 1; i < bot.settings.rssFeeds.length; i++) {
+													rssOptions += ", '";
+													rssOptions += bot.settings.rssFeeds[i][0];
+													rssOptions += "'";
+												}
+												rssOptions += ".";
+												
+												API.sendChat(rssOptions);
+										}
 									}
 								},
 						 
@@ -72,24 +79,31 @@
 								},
 						 
 								display: function (results) {
-									if (parameter == 'baseball') {
-										var rNumber = Math.floor(Math.random()*16);
-									} else if (parameter == 'progrock') {
-										var rNumber = Math.floor(Math.random()*10);
-									} else if (parameter == 'metal') {
-										var rNumber = Math.floor(Math.random()*20);
-									} else if (parameter == 'jokes') {
-										var rNumber = Math.floor(Math.random()*25);
-									} else {
-										var rNumber = Math.floor(Math.random()*25);	//default
-									}
-									var long_url = results.query.results.rss.channel.item[rNumber].link;
+									if (selectedRSSFeed != -1) {
+									
+										//var rNumber = Math.floor(Math.random()*bot.settings.rssFeeds[selectedRSSFeed][2]);
+										if (bot.settings.rssFeeds[selectedRSSFeed][3] != bot.settings.rssFeeds[selectedRSSFeed][2] - 1) {
+											bot.settings.rssFeeds[selectedRSSFeed][3] += 1;
+										} else {
+											bot.settings.rssFeeds[selectedRSSFeed][3] = 0;
+										}
 										
-									API.sendChat(
-									results.query.results.rss.channel.item[rNumber].title 
-									+ " (" 
-									+ long_url
-									+ ")");
+										var long_url = results.query.results.rss.channel.item[bot.settings.rssFeeds[selectedRSSFeed][3]].link;
+											
+										if (bot.settings.rssFeeds[selectedRSSFeed][0] === "oneliners") {
+											var oneliner = results.query.results.rss.channel.item[bot.settings.rssFeeds[selectedRSSFeed][3]].description;
+											oneliner = oneliner.replace('<![CDATA[','').replace(']','').replace('<p>','').replace('</p>','');
+											API.sendChat(
+												oneliner
+											);
+										} else {
+											API.sendChat(
+											results.query.results.rss.channel.item[bot.settings.rssFeeds[selectedRSSFeed][3]].title 
+											+ " (" 
+											+ long_url
+											+ ")");
+										}
+									}
 								}
 						}
 						simpleAJAXLib.init();
@@ -109,12 +123,12 @@
 					bot.settings.ruletime = msg.substring(cmd.length + 1);
 						if (cmd.length !== chat.message.length) {
 							if (!isNaN(parseInt(bot.settings.ruletime,10))) {
-								window.clearInterval(bot.settings.ruletimer);
+								clearInterval(bot.settings.ruletimer);
 								bot.settings.ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(bot.settings.ruletime,10));
 								API.sendChat("/me enabled the reminder for every " + parseInt(bot.settings.ruletime,10) + " minutes");
 							}
 						} else {
-							window.clearInterval(bot.settings.ruletimer);
+							clearInterval(bot.settings.ruletimer);
 							API.sendChat("/me disabled the reminder");
 						}
                 }
@@ -181,6 +195,14 @@
         chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
 		ruletimer: 1,
 		ruletime: 15,
+		rssFeeds: [
+			["baseball","http://sports.espn.go.com/espn/rss/mlb/news",16,0],
+			["progrock","http://progressiverockcentral.com/feed/",10,0],
+			["rock","http://www.rollingstone.com/music.rss",25,0],
+			["metal","http://www.metalstorm.net/rss/news.xml",15,0],
+			["jokes","http://www.jokesareawesome.com/rss/latest/25/",25,0],
+			["oneliners","http://www.jokespalace.com/category/one-liners/feed/",10,0]
+		],
         maximumAfk: 120,
         afkRemoval: true,
         maximumDc: 60,
