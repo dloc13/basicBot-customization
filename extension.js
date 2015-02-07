@@ -111,6 +111,7 @@
 						if (bot.settings.rulereminder) {
 							if (!isNaN(parseInt(minutes,10))) {
 								bot.settings.rulereminder = !bot.settings.rulereminder;
+								window.clearInterval(ruletimer);
 								ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(minutes,10));
 								API.sendChat("/me enabled the reminder for every " + parseInt(minutes,10) + " minutes");
 							}
