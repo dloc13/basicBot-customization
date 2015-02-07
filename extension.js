@@ -10,7 +10,6 @@
 
         //Precaution to make sure it is assigned properly.
         var bot = window.bot;
-		var ruletimer;
         //Load custom settings set below
         bot.retrieveSettings();
 
@@ -107,17 +106,15 @@
                 if (!bot.commands.executable(this.rank, chat)) return void (0);
                 else {
 					var msg = chat.message;
-					var minutes = msg.substring(cmd.length + 1);			
-						if (bot.settings.rulereminder) {
-							if (!isNaN(parseInt(minutes,10))) {
-								bot.settings.rulereminder = !bot.settings.rulereminder;
-								window.clearInterval(ruletimer);
-								ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(minutes,10));
-								API.sendChat("/me enabled the reminder for every " + parseInt(minutes,10) + " minutes");
+					bot.settings.ruletime = msg.substring(cmd.length + 1);
+						if (cmd.length !== chat.message.length) {
+							if (!isNaN(parseInt(bot.settings.ruletime,10))) {
+								window.clearInterval(bot.settings.ruletimer);
+								bot.settings.ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(bot.settings.ruletime,10));
+								API.sendChat("/me enabled the reminder for every " + parseInt(bot.settings.ruletime,10) + " minutes");
 							}
 						} else {
-							bot.settings.rulereminder = !bot.settings.rulereminder;
-							window.clearInterval(ruletimer);
+							window.clearInterval(bot.settings.ruletimer);
 							API.sendChat("/me disabled the reminder");
 						}
                 }
@@ -182,8 +179,9 @@
         botName: "basicBot",
         language: "english",
         chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
+		ruletimer: 1,
+		ruletime: 15,
         maximumAfk: 120,
-		rulereminder: true,
         afkRemoval: true,
         maximumDc: 60,
         bouncerPlus: true,
@@ -215,7 +213,6 @@
         filterChat: true,
         etaRestriction: false,
         welcome: true,
-		welcomemsg: "Rock ipedia has summoned you! Welcome!",
         opLink: null,
         rulesLink: null,
         themeLink: null,
