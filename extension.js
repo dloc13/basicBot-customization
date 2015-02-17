@@ -28,7 +28,8 @@
          }
          }
          }
-         */
+         */ 
+		 
 		bot.commands.newsCommand = {
             command: 'news',  //The command to be called. With the standard command literal this would be: !bacon
             rank: 'user', //Minimum user permission to use the command
@@ -182,10 +183,6 @@
             }
         };
 		
-		if (bot.settings.ruletimer) {
-				bot.settings.ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(basicBot.settings.ruletime,10)); //extended load
-		}
-
         //Load the chat package again to account for any changes
         bot.loadChat();
 
@@ -197,6 +194,8 @@
         botName: "basicBot",
         language: "english",
         chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
+		quizmaxpoints: 100,
+		quizstate: false,
 		ruletimer: 1,
 		ruletime: 30,
 		rssFeeds: [
