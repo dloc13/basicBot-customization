@@ -206,7 +206,7 @@
 			["jokes","http://www.jokesareawesome.com/rss/latest/25/",25,0],
 			["oneliners","http://www.jokespalace.com/category/one-liners/feed/",10,0],
 			["chicagobears","http://feeds.feedburner.com/chicagobears/news?format=xml",15,0],
-			["football","http://www.nfl.com/rss/rsslanding?searchString=home",8,0]
+			["football","http://sports.espn.go.com/espn/rss/nfl/news",16,0]
 		],
         maximumAfk: 120,
         afkRemoval: true,
