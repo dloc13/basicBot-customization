@@ -183,7 +183,7 @@
             }
         };
 		
-        //Load the chat package again to account for any changes
+        //Load the chat package again to account for any changes 
         bot.loadChat();
 
     }
@@ -206,7 +206,7 @@
 			["jokes","http://www.jokesareawesome.com/rss/latest/25/",25,0],
 			["oneliners","http://www.jokespalace.com/category/one-liners/feed/",10,0],
 			["chicagobears","http://feeds.feedburner.com/chicagobears/news?format=xml",15,0],
-			["football","http://sports.espn.go.com/espn/rss/nfl/news",16,0]
+			["football","http://sports.espn.go.com/espn/rss/nfl/news",16,0],
 			["facts","http://uber-facts.com/feed/",10,0]
 		],
         maximumAfk: 120,
