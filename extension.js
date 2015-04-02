@@ -207,6 +207,7 @@
 			["oneliners","http://www.jokespalace.com/category/one-liners/feed/",10,0],
 			["chicagobears","http://feeds.feedburner.com/chicagobears/news?format=xml",15,0],
 			["football","http://sports.espn.go.com/espn/rss/nfl/news",16,0]
+			["facts","http://uber-facts.com/feed/",10,0]
 		],
         maximumAfk: 120,
         afkRemoval: true,
