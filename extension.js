@@ -121,7 +121,54 @@
 						simpleAJAXLib.init();
                 }
             }
-        }; 
+        };
+
+		bot.commands.weatherCommand = {
+            command: 'weather',  //The command to be called. With the standard command literal this would be: !bacon
+            rank: 'user', //Minimum user permission to use the command
+            type: 'startsWith', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
+            functionality: function (chat, cmd) {
+                if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                if (!bot.commands.executable(this.rank, chat)) return void (0);
+                else {
+						var msg = chat.message;
+						var lastSpace = msg.lastIndexOf(' ');
+						var parameter = msg.substring(lastSpace + 1);
+						
+						simpleAJAXLib = {
+						
+								init: function () {
+									this.fetchJSON("http://rss.accuweather.com/rss/liveweather_rss.asp?metric=2&locCode=" + parameter);
+								},
+						 
+								fetchJSON: function (url) {
+									var root = 'https://query.yahooapis.com/v1/public/yql?q=';
+									var yql = 'select * from xml where url="' + url + '"';
+									var proxy_url = root + encodeURIComponent(yql) + '&format=json&diagnostics=false&callback=simpleAJAXLib.display';
+									document.getElementsByTagName('body')[0].appendChild(this.jsTag(proxy_url));
+								},
+						 
+								jsTag: function (url) {
+									var script = document.createElement('script');
+									script.setAttribute('type', 'text/javascript');
+									script.setAttribute('src', url);
+									return script;
+								},
+						 
+								display: function (results) {								
+									var temperature = results.query.results.rss.channel.item[0].description;
+									temperature = temperature.replace('<img src="','').replace('">','');
+									temperature = temperature.replace(/&#([0-9]{1,4});/gi, function(match, numStr) {
+												var num = parseInt(numStr, 10); // read num as normal number
+												return String.fromCharCode(num);
+											});
+									API.sendChat(temperature);
+								}
+						}
+						simpleAJAXLib.init();
+                }
+            }
+        };
 		 
 		bot.commands.rulereminderCommand = {
             command: 'rulereminder',  //The command to be called. With the standard command literal this would be: !bacon
