@@ -58,8 +58,7 @@
 													rssOptions += bot.settings.rssFeeds[i][0];
 													rssOptions += "'";
 												}
-												rssOptions += ".";
-												
+												rssOptions += ".";											
 												API.sendChat(rssOptions);
 										}
 									}
@@ -93,10 +92,22 @@
 											
 										if (bot.settings.rssFeeds[selectedRSSFeed][0] === "oneliners") {
 											var oneliner = results.query.results.rss.channel.item[bot.settings.rssFeeds[selectedRSSFeed][3]].description;
-											oneliner = oneliner.replace('<![CDATA[','').replace(']','').replace('<p>','').replace('</p>','');
-											API.sendChat(
-												oneliner
-											);
+											oneliner = oneliner.replace('<![CDATA[','').replace(']','').replace('<p>','').replace('</p>','').replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi,'');
+											oneliner = oneliner.replace(/&#([0-9]{1,4});/gi, function(match, numStr) {
+												var num = parseInt(numStr, 10); // read num as normal number
+												return String.fromCharCode(num);
+											});
+											oneliner = oneliner.replace('/ +/','');
+											if (oneliner.length > 249) {
+												var counter=0;
+												for (var x=0; x < oneliner.length; x++) {
+												  setTimeout(function() {API.sendChat(oneliner.substring(counter*249,(counter+1)*249));counter++;},x*2000);
+												}
+											} else {
+												API.sendChat(						
+													oneliner
+												);
+											}
 										} else {
 											API.sendChat(
 											results.query.results.rss.channel.item[bot.settings.rssFeeds[selectedRSSFeed][3]].title 
@@ -207,7 +218,8 @@
 			["oneliners","http://www.jokespalace.com/category/one-liners/feed/",10,0],
 			["chicagobears","http://feeds.feedburner.com/chicagobears/news?format=xml",15,0],
 			["football","http://sports.espn.go.com/espn/rss/nfl/news",16,0],
-			["facts","http://uber-facts.com/feed/",10,0]
+			["facts","http://uber-facts.com/feed/",10,0],
+			["hockey","http://islanders.nhl.com/rss/news.xml",34,0]
 		],
         maximumAfk: 120,
         afkRemoval: true,
